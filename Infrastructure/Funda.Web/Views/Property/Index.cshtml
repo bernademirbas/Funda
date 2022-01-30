@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Linq
+@using (Html.BeginForm("Index", "Property", new { searchText = "amsterdam" }, FormMethod.Get))
+{
+    @model List<Funda.Domain.Responses.EstateAgentResponse>
+
+    @Html.HiddenFor(model => model.Count)
+    {
+        var searchText = string.IsNullOrEmpty(ViewBag.SearchText) ? "tuin" : "";
+        var currentListText = string.IsNullOrEmpty(ViewBag.SearchText) ? string.Empty : "with garden";
+        var buttonText = ViewBag.SearchText == "tuin" ? string.Empty : "with garden";
+        <div class="text-center">
+            <h4>Estate Agents that have the most objects listed for sale within amsterdam @currentListText</h4>
+        </div>
+        <p class="text-center">
+            @Html.ActionLink($"Get Estate Agents {buttonText}", "Index", "Property", new { searchText }, new { @class = "btn btn-primary" })
+        </p>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().EstateAgentId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().EstateAgentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().PropertyCount)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstateAgentId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstateAgentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PropertyCount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
